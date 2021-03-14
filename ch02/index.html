@@ -1,0 +1,113 @@
+<html>
+
+<head>
+    <title>Vue.js Pet Depot</title>
+    <script src="https://unpkg.com/vue"></script>
+    <link rel="stylesheet" type="text/css" href="assets/css/app.css" />
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css"
+        crossorigin="anonymous">
+</head>
+
+<body>
+    <div id="app">
+        <header>
+            <h1 v-text="sitename"></h1>
+        </header>
+        <p>Welcome to {{ sitename | uppperCase }}</p>
+        <main>
+            <div class="row product">
+                <div class="col">
+                    <figure>
+                        <img :src="product.image" />
+                    </figure>
+                </div>
+            </div>
+            <div class="col col-expand">
+                <h1 v-text="product.title"></h1>
+                <p v-html="product.description"></p>
+                <p class="price">
+                    {{ product.price | formatPrice }}
+                </p>
+            </div>
+        </main>
+    </div>
+    <script type="text/javascript">
+        const APP_LOG_LIFECYCLE_EVENTS = true;
+
+        var webstore = new Vue({
+            el: '#app',
+            data: {
+                sitename: 'Vue.js Pet Depto',
+                product: {
+                    id: 1001,
+                    title: '小米10S',
+                    description: '小米10S 骁龙870 哈曼卡顿对称式双扬立体声 <em>8GB+256GB</em> 黑色 旗舰手机',
+                    price: 3499.00,
+                    image: 'assets/images/mi10S.jpg'
+                }
+            },
+            filters: {
+                formatPrice: function (price) {
+                    if (!parseInt(price)) { return ""; }
+                    if (price > 99999) {
+                        var priceString = (price / 100).toFixed(2);
+                        var priceArray = priceString.split("").reverse();
+                        var index = 3;
+                        while (priceArray.length > index + 3) {
+                            priceArray.splice(index + 3, 0, ",");
+                            index += 4;
+                        }
+                        return "￥" + priceArray.reverse().join("");
+                    } else {
+                        return "￥" + (price / 100).toFixed(2);
+                    }
+                },
+                uppperCase: function (str) {
+                    return str.toUpperCase();
+                }
+            },
+            beforeCreate: function () {
+                if (APP_LOG_LIFECYCLE_EVENTS) {
+                    console.log("beforeCreate");
+                }
+            },
+            created: function () {
+                if (APP_LOG_LIFECYCLE_EVENTS) {
+                    console.log("created");
+                }
+            },
+            beforeMount: function () {
+                if (APP_LOG_LIFECYCLE_EVENTS) {
+                    console.log("beforeMount");
+                }
+            },
+            mounted: function () {
+                if (APP_LOG_LIFECYCLE_EVENTS) {
+                    console.log("mounted");
+                }
+            },
+            beforeUpdate: function () {
+                if (APP_LOG_LIFECYCLE_EVENTS) {
+                    console.log("beforeUpdate");
+                }
+            },
+            updated: function () {
+                if (APP_LOG_LIFECYCLE_EVENTS) {
+                    console.log("updated");
+                }
+            },
+            beforeDestroy: function () {
+                if (APP_LOG_LIFECYCLE_EVENTS) {
+                    console.log("beforeDestroy ");
+                }
+            },
+            destroyed: function () {
+                if (APP_LOG_LIFECYCLE_EVENTS) {
+                    console.log("destroyed");
+                }
+            }
+        });
+    </script>
+</body>
+
+</html>
