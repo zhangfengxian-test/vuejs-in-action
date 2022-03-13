@@ -4,13 +4,23 @@
     <title>Vue.js Pet Depot</title>
     <script src="https://unpkg.com/vue@2"></script>
     <link rel="stylesheet" type="text/css" href="assets/css/app.css" />
-    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" crossorigin="anonymous">
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous">
 </head>
 
 <body>
     <div id="app">
         <header>
-            <h1 v-text="sitename"></h1>
+            <div class="navbar navbar-default">
+                <h1 v-text="sitename"></h1>
+            </div>
+            <div class="nav navbar-nav navbar-right cart">
+                <button class="btn btn-default btn-lg" @click="showCheckout">
+                    <span class="glyphicon glyphicon-shopping-cart">
+                        {{ cartItemCount }}
+                    </span>
+                    Checkout
+                </button>
+            </div>
         </header>
         <p>Welcome to {{ sitename | uppperCase }}</p>
         <main>
@@ -27,12 +37,16 @@
                 <p class="price">
                     {{ product.price | formatPrice }}
                 </p>
+                <button class="btn btn-default" @click="addToCart" v-if="canAddToCart">
+                    Add to cart
+                </button>
+                <button class="btn disabled btn-default" disabled="disabled" v-else>
+                    Add to cart
+                </button>
             </div>
         </main>
     </div>
     <script type="text/javascript">
-        const APP_LOG_LIFECYCLE_EVENTS = true;
-
         var webstore = new Vue({
             el: '#app',
             data: {
@@ -42,8 +56,11 @@
                     title: '小米10S',
                     description: '小米10S 骁龙870 哈曼卡顿对称式双扬立体声 <em>8GB+256GB</em> 黑色 旗舰手机',
                     price: 3499.00,
-                    image: 'assets/images/mi10S.jpg'
-                }
+                    image: 'assets/images/mi10S.jpg',
+                    availableInventory: 4,
+                },
+                showProduct: true,
+                cart: []
             },
             filters: {
                 formatPrice: function(price) {
@@ -67,44 +84,20 @@
                     return str.toUpperCase();
                 }
             },
-            beforeCreate: function() {
-                if (APP_LOG_LIFECYCLE_EVENTS) {
-                    console.log("beforeCreate");
+            methods: {
+                addToCart: function() {
+                    this.cart.push(this.product.id);
+                },
+                showCheckout() {
+                    this.showProduct = this.showProduct ? false : true;
                 }
             },
-            created: function() {
-                if (APP_LOG_LIFECYCLE_EVENTS) {
-                    console.log("created");
-                }
-            },
-            beforeMount: function() {
-                if (APP_LOG_LIFECYCLE_EVENTS) {
-                    console.log("beforeMount");
-                }
-            },
-            mounted: function() {
-                if (APP_LOG_LIFECYCLE_EVENTS) {
-                    console.log("mounted");
-                }
-            },
-            beforeUpdate: function() {
-                if (APP_LOG_LIFECYCLE_EVENTS) {
-                    console.log("beforeUpdate");
-                }
-            },
-            updated: function() {
-                if (APP_LOG_LIFECYCLE_EVENTS) {
-                    console.log("updated");
-                }
-            },
-            beforeDestroy: function() {
-                if (APP_LOG_LIFECYCLE_EVENTS) {
-                    console.log("beforeDestroy ");
-                }
-            },
-            destroyed: function() {
-                if (APP_LOG_LIFECYCLE_EVENTS) {
-                    console.log("destroyed");
+            computed: {
+                cartItemCount: function() {
+                    return this.cart.length || '';
+                },
+                canAddToCart: function() {
+                    return this.cartItemCount < this.product.availableInventory;
                 }
             }
         });
