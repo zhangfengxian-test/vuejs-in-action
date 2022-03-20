@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Event Listen</title>
+    <script src="https://unpkg.com/vue@2"></script>
+</head>
+
+<body>
+    <div id="app">
+        {{counter}}<br />
+        <button @click="incrementCounter">Increment Counter</button>
+        <my-component @increment-me="incrementCounter"></my-component>
+    </div>
+    <script>
+        const MyComponent = {
+            template: `<div>
+                <button @click="childIncrementCounter">Increment From child</button>
+            </div>`,
+            methods: {
+                childIncrementCounter() {
+                    this.$emit('increment-me');
+                }
+            }
+        };
+        new Vue({
+            el: '#app',
+            data() {
+                return {
+                    counter: 0
+                }
+            },
+            components: {
+                'my-component': MyComponent
+            },
+            methods: {
+                incrementCounter() {
+                    this.counter++;
+                }
+            }
+        });
+    </script>
+</body>
+
+</html>
