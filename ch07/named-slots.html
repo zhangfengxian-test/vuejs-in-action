@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Named Slots</title>
+    <script src="https://unpkg.com/vue@2"></script>
+</head>
+
+<body>
+    <div id="app">
+        <my-form :title="titleLabel" :author="authorLabel">
+            <h1>{{header}}</h1>
+            <label for="title" slot="titleSlot">{{titleLabel}}</label>
+            <label for="author" slot="authorSlot">{{authorLabel}}</label>
+        </my-form>
+    </div>
+    <script>
+        const MyComponent = {
+            template: `<div>
+                <form>
+                    <slot></slot>
+                    <slot name="titleSlot"></slot>
+                    <input id="title" type="text" /><br/>
+                    <slot name="authorSlot"></slot>
+                    <input id="author" type="text" /><br/>
+                    <button>Submit</button>
+                </form> 
+            </div>`,
+            props: ['title', 'author']
+        };
+        new Vue({
+            el: '#app',
+            components: {
+                'my-form': MyComponent
+            },
+            data() {
+                return {
+                    titleLabel: 'The Title:',
+                    authorLabel: 'The Author:',
+                    header: 'Book Author Form'
+                };
+            }
+        });
+    </script>
+</body>
+
+</html>

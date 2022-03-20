@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Name Scoped Slots</title>
+    <script src="https://unpkg.com/vue@2"></script>
+</head>
+
+<body>
+    <div id="app">
+        <book-component :books="books">
+            <h1 slot="header">{{header}}</h1>
+            <template slot="book" slot-scope="props">
+                <h2>
+                    <i>{{props.text.title}}</i>
+                    <small>by: {{props.text.author}}</small>
+                </h2>
+            </template>
+        </book-component>
+    </div>
+    <script>
+        const BookComponent = {
+            template: `<div>
+                <slot name="header"></slot>
+                <slot name="book" v-for="book in books" :text="book"></slot>
+            </div>`,
+            props: ['books']
+        };
+        new Vue({
+            el: '#app',
+            components: {
+                'book-component': BookComponent
+            },
+            data() {
+                return {
+                    header: 'Book List',
+                    books: [{
+                        author: 'John Smith',
+                        title: 'Best Of Times'
+                    }, {
+                        author: 'Jane Doe',
+                        title: 'Go West Young Man'
+                    }, {
+                        author: 'Avery Katz',
+                        title: 'The Life And Times Of Avery'
+                    }]
+                };
+            }
+        });
+    </script>
+</body>
+
+</html>
