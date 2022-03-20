@@ -1,0 +1,107 @@
+<html>
+
+<head>
+    <title>Vue.js Pet Depot</title>
+    <script src="https://unpkg.com/vue@2"></script>
+    <link rel="stylesheet" type="text/css" href="assets/css/app.css" />
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous">
+</head>
+
+<body>
+    <div id="app">
+        <header>
+            <div class="navbar navbar-default">
+                <h1 v-text="sitename"></h1>
+            </div>
+            <div class="nav navbar-nav navbar-right cart">
+                <button class="btn btn-default btn-lg" @click="showCheckout">
+                    <span class="glyphicon glyphicon-shopping-cart">
+                        {{ cartItemCount }}
+                    </span>
+                    Checkout
+                </button>
+            </div>
+        </header>
+        <p>Welcome to {{ sitename | uppperCase }}</p>
+        <main>
+            <div class="row product">
+                <div class="col">
+                    <figure>
+                        <img :src="product.image" />
+                    </figure>
+                </div>
+            </div>
+            <div class="col col-expand">
+                <h1 v-text="product.title"></h1>
+                <p v-html="product.description"></p>
+                <p class="price">
+                    {{ product.price | formatPrice }}
+                </p>
+                <button class="btn btn-default" @click="addToCart" v-if="canAddToCart">
+                    Add to cart
+                </button>
+                <button class="btn disabled btn-default" disabled="disabled" v-else>
+                    Add to cart
+                </button>
+            </div>
+        </main>
+    </div>
+    <script type="text/javascript">
+        var webstore = new Vue({
+            el: '#app',
+            data: {
+                sitename: 'Vue.js Pet Depto',
+                product: {
+                    id: 1001,
+                    title: '小米10S',
+                    description: '小米10S 骁龙870 哈曼卡顿对称式双扬立体声 <em>8GB+256GB</em> 黑色 旗舰手机',
+                    price: 3499.00,
+                    image: 'assets/images/mi10S.jpg',
+                    availableInventory: 4,
+                },
+                showProduct: true,
+                cart: []
+            },
+            filters: {
+                formatPrice: function(price) {
+                    if (!parseInt(price)) {
+                        return "";
+                    }
+                    if (price > 99999) {
+                        var priceString = (price / 100).toFixed(2);
+                        var priceArray = priceString.split("").reverse();
+                        var index = 3;
+                        while (priceArray.length > index + 3) {
+                            priceArray.splice(index + 3, 0, ",");
+                            index += 4;
+                        }
+                        return "￥" + priceArray.reverse().join("");
+                    } else {
+                        return "￥" + (price / 100).toFixed(2);
+                    }
+                },
+                uppperCase: function(str) {
+                    return str.toUpperCase();
+                }
+            },
+            methods: {
+                addToCart: function() {
+                    this.cart.push(this.product.id);
+                },
+                showCheckout() {
+                    this.showProduct = this.showProduct ? false : true;
+                }
+            },
+            computed: {
+                cartItemCount: function() {
+                    return this.cart.length || '';
+                },
+                canAddToCart: function() {
+                    return this.cartItemCount < this.product.availableInventory;
+                }
+            }
+        });
+    </script>
+</body>
+
+</html>

@@ -1,0 +1,124 @@
+<html>
+
+<head>
+    <title>First-last</title>
+    <script src="https://unpkg.com/vue@2"></script>
+    <link rel="stylesheet" type="text/css" href="assets/css/app.css" />
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous">
+</head>
+
+<body>
+    <div id="app">
+        <div class="form-group">
+            <div class="col-md-6">
+                <strong>First Name:</strong>
+                <input v-model.trim.lazy="order.firstName" class="form-control">
+            </div>
+            <div class="col-md-6">
+                <strong>Last Name:</strong>
+                <input v-model.trim="order.lastName" class="form-control">
+            </div>
+        </div>
+        <div class="form-group">
+            <div class="col-md-12">
+                <strong>Address:</strong>
+            </div>
+            <div class="col-md-12">
+                <input v-model.trim="order.address" class="form-control">
+            </div>
+        </div>
+        <div class="form-group">
+            <div class="col-md-12">
+                <strong>City:</strong>
+            </div>
+            <div class="col-md-12">
+                <input v-model.trim="order.city" class="form-control">
+            </div>
+        </div>
+        <div class="form-group">
+            <div class="col-md-2">
+                <strong>State:</strong>
+                <select v-model="order.state" class="form-control">
+                    <option disabled value="">State</option>
+                    <option v-for="(state, key) in states" v-bind:value="state">
+                        {{key}}
+                    </option>
+                </select>
+            </div>
+        </div>
+        <div class="form-group">
+            <div class="col-md-6 col-md-offset-4">
+                <strong>Zip / Postal Code:</strong>
+                <input v-model.number="order.zip" class="form-control" type="number">
+            </div>
+        </div>
+        <div class="form-group">
+            <div class="col-md-6 boxes">
+                <input id="gift" type="checkbox" value="true" v-bind:true-value="order.sendAsGift" v-bind:false-value="order.dontSendAsGift" v-model="order.gift">
+                <label for="gift">Ship as Gift?</label>
+            </div>
+        </div>
+        <div class="form-group">
+            <div class="col-md-6 boxes">
+                <input id="home" type="radio" value="Home" v-bind:value="order.home" v-model="order.method">
+                <label for="home">Home</label>
+                <input id="business" type="radio" value="Business" v-bind:value="order.business" v-model="order.method">
+                <label for="business">Business</label>
+            </div>
+        </div>
+        <div class="form-group">
+            <div class="col-md-6 boxes">
+                <button type="submit" class="btn btn-primary submit" v-on:click="submitForm">
+                    Place Order
+                </button>
+            </div>
+        </div>
+
+        <div class="col-md-12 verify">
+            <pre>
+                First Name: {{order.firstName}}
+                 Last Name: {{order.lastName}}
+                   Address: {{order.address}}
+                      City: {{order.city}}
+                      Sate: {{order.state}}
+                       Zip: {{order.zip}}
+                      Gift: {{order.gift}}
+                    Method: {{order.method}}
+            </pre>
+        </div>
+    </div>
+    <script type="text/javascript">
+        var webstore = new Vue({
+            el: '#app',
+            data: {
+                order: {
+                    firstName: "",
+                    lastName: "",
+                    address: "",
+                    city: "",
+                    state: "",
+                    zip: "",
+                    gift: "Send as A Gift",
+                    sendAsGift: "Send as A Gift",
+                    dontSendAsGift: "Do Not Send As Gift",
+                    method: "Home Address",
+                    business: "Business Address",
+                    home: "Home Address"
+                },
+                states: {
+                    AL: 'Alabama',
+                    AR: 'Arizona',
+                    CA: 'California',
+                    NV: 'Nevada'
+                }
+            },
+            methods: {
+                submitForm() {
+                    alert("submit...")
+                }
+            }
+        });
+    </script>
+</body>
+
+</html>
